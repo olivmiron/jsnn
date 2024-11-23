@@ -1,0 +1,14 @@
+/* settings */
+
+@font-face {
+    font-family: main_font;
+    src: url("/resources/design/other/Montserrat.ttf");
+  }
+
+
+/* general rules */
+
+body {margin: 0px;font-family: "main_font";}
+
+
+/* specific rules */
