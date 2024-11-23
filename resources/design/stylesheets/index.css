@@ -5,10 +5,60 @@
     src: url("/resources/design/other/Montserrat.ttf");
   }
 
+:root {
+  /* COLORS */
+  --main_color: #004643;
+  --standard-border-radius: 8px;
+
+  /* widgets settings */
+  --widget_spacing: 16px;
+  --widgets_per_row: 2;
+  --widget-box-shadow: 0px 6px 20px -14px black;
+}
+
+
 
 /* general rules */
 
-body {margin: 0px;font-family: "main_font";}
+body {margin: 0px;font-family: "main_font";background-color: #f5f5f5;}
+
+
+/* custom UI elements */
 
 
 /* specific rules */
+
+
+
+/* widgets container */
+.widgets_container {margin: calc(var(--widget_spacing) /2);box-sizing: border-box;}
+/* page widget */
+.page_widget {display: inline-block;border-radius: var(--standard-border-radius);box-shadow: var(--widget-box-shadow);position: relative;margin: calc(var(--widget_spacing) /2);width: calc(100% / var(--widgets_per_row) - var(--widget_spacing));box-sizing: border-box;background-color: white;}
+.page_widget_subcontainer {}
+
+
+
+.page_widget_top {display: flex;background-color: var(--main_color);color: white;font-weight: bold;letter-spacing: 0.15px;border-radius: var(--standard-border-radius) var(--standard-border-radius) 0 0;padding: calc(var(--widget_spacing) * 3/4 - 1px) calc(var(--widget_spacing) * 3/4);position: relative;z-index: 1;box-shadow: 0px 1px 15px -5px black;}
+
+.page_widget_top_title {flex: 1;display: flex;align-items: center;}
+.page_widget_top_title span {}
+.page_widget_top_actions {flex: 0;display: flex;align-items: center;}
+
+
+
+
+
+.page_widget_content {
+    min-height: 250px;
+    border-radius: 0 0 var(--standard-border-radius) var(--standard-border-radius);
+    position: relative;
+    z-index: 0;
+    border-color: var(--main_color);
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    box-sizing: border-box;
+}
+.page_widget_content_subcontainer {
+    padding: calc(var(--widget_spacing) * 3/4);
+}
+
