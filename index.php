@@ -13,5 +13,38 @@
     </head>
     <body>
         <?php echo complex_template_iterator("/resources/logic/templates/page_widget/"); ?>
+
+        <div>
+
+            <input type="text" placeholder="name" onclick="this.select();">
+
+            <input type="number" value="12" onclick="this.select();">
+
+            <div class="dropdown" data-opened="0" data-value="1" onclick="dropdown_toggle(this)">
+                <div class="dropdown_main">
+                    <span class="dropdown_main_text">Selection #1</span>
+                    <div class="dropdown_main_arrow">
+                        <img src="/resources/design/media/icons/arrow_down_black.png"/>
+                    </div>
+                </div>
+                <div class="dropdown_list">
+                    <div class="dropdown_list_element dropdown_list_active_element" data-value="1" onclick="dropdown_select(this)"><span>Selection #1</span></div>
+                    <div class="dropdown_list_element" data-value="2" onclick="dropdown_select(this)"><span>Selection #2</span></div>
+                    <div class="dropdown_list_element" data-value="3" onclick="dropdown_select(this)"><span>Selection #3</span></div>
+                    <div class="dropdown_list_element" data-value="4" onclick="dropdown_select(this)"><span>Selection #4</span></div>
+                </div>
+            </div>
+
+            <div class="checkbox checkbox_checked">
+                <div class="checkbox_box"><img src="/resources/design/media/icons/check_mark.png"/></div>
+                <div class="checkbox_text">
+                    <span>Check mark</span>
+                </div>
+            </div>
+
+            <div class="button">Click</div>
+
+        </div>
+
     </body>
 </html>
