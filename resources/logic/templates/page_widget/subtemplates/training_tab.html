@@ -1,0 +1,56 @@
+<div>
+
+    <div class="div_container_align_middle">
+        <h2>Train neural network</h2>
+        <br/>
+    </div>
+    
+    <div class="flex_box justify_middle">
+        <span class="input_explanation">Train on:</span>
+        
+        <div id="training_tab_train_on"class="dropdown" data-opened="0" data-value="current_image" onclick="dropdown_toggle(this)">
+            <div class="dropdown_main">
+                <span class="dropdown_main_text">Current image</span>
+                <div class="dropdown_main_arrow">
+                    <img src="/resources/design/media/icons/arrow_down_black.png"/>
+                </div>
+            </div>
+            <div class="dropdown_list">
+                <div class="dropdown_list_element dropdown_list_active_element" data-value="current_image" onclick="dropdown_select(this)"><span>Current image</span></div>
+                <div class="dropdown_list_element" data-value="stored_images" onclick="dropdown_select(this)"><span>Stored images</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="middle_sepparator_line"><div></div></div>
+
+    
+    <div class="flex_box justify_middle">
+        <span class="input_explanation">Train iterations:</span>
+        
+        <div id="training_tab_train_iterations"class="dropdown" data-opened="0" data-value="1" onclick="dropdown_toggle(this)">
+            <div class="dropdown_main">
+                <span class="dropdown_main_text">1 time</span>
+                <div class="dropdown_main_arrow">
+                    <img src="/resources/design/media/icons/arrow_down_black.png"/>
+                </div>
+            </div>
+            <div class="dropdown_list">
+                <div class="dropdown_list_element dropdown_list_active_element" data-value="1" onclick="dropdown_select(this)"><span>1 time</span></div>
+                <div class="dropdown_list_element" data-value="5" onclick="dropdown_select(this)"><span>5 times</span></div>
+                <div class="dropdown_list_element" data-value="10" onclick="dropdown_select(this)"><span>10 times</span></div>
+                <div class="dropdown_list_element" data-value="25" onclick="dropdown_select(this)"><span>25 times</span></div>
+                <div class="dropdown_list_element" data-value="100" onclick="dropdown_select(this)"><span>100 times</span></div>
+                <div class="dropdown_list_element" data-value="250" onclick="dropdown_select(this)"><span>250 times</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="middle_sepparator_line"><div></div></div>
+
+    <div class="div_container_align_middle">
+        <div class="button">Train network</div>
+    </div>
+</div>

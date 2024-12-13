@@ -1,6 +1,8 @@
 //// custom UI elements handling
 
 
+// the drop down
+
 function dropdown_toggle(dropdown) {event.stopPropagation();
     if(dropdown.getAttribute("data-opened") == "0") {
 
@@ -35,14 +37,14 @@ function dropdown_select(dropdown_element) {
     dropdown_toggle(dropdown_element.closest(".dropdown"));
 }
 
-// the drop down
-
 
 
 
 // the checkbox
 
-
+function toggle_checkbox(respective_checkbox) {
+    respective_checkbox.classList.toggle("checkbox_checked");
+}
 
 
 
