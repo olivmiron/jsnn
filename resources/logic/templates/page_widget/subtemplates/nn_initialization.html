@@ -27,13 +27,38 @@
         <h2>NN deep layers size</h2>
         <br/>
         <div id="nn-initialization_deep_size">
-                <input id="nn-initialization_deep_size_vertical" type="number" value="5" onclick="this.select();" title="Number of neurons per layer">
-                <input id="nn-initialization_deep_size_hotizontal" type="number" value="25" onclick="this.select();" title="Number of deep layers">
+                <input id="nn-initialization_deep_size_vertical" type="number" value="25" onclick="this.select();" title="Number of neurons per layer">
+                <input id="nn-initialization_deep_size_hotizontal" type="number" value="8" onclick="this.select();" title="Number of deep layers">
                 <img id="nn-initialization_deep_size_box" src="/resources/design/media/icons/deep_layers_box.png"/>
         </div>
     </div>
 
     <div class="middle_sepparator_line"><div></div></div>
+
+    <div class="flex_box justify_middle">
+        <span class="input_explanation">Weight initialization:</span>
+        
+        <div id="nn_weight_initialization" class="dropdown" data-opened="0" data-value="xavier" onclick="dropdown_toggle(this)">
+            <div class="dropdown_main">
+                <span class="dropdown_main_text">Xavier</span>
+                <div class="dropdown_main_arrow" style="rotate: 0deg;">
+                    <img src="/resources/design/media/icons/arrow_down_black.png">
+                </div>
+            </div>
+            <div class="dropdown_list" style="display: none;">
+                <div class="dropdown_list_element dropdown_list_active_element" data-value="xavier" onclick="dropdown_select(this)"><span>Xavier</span></div>
+                <div class="dropdown_list_element" data-value="he" onclick="dropdown_select(this)"><span>He</span></div>
+                <div class="dropdown_list_element" data-value="random_normal" onclick="dropdown_select(this)"><span>Random Normal</span></div>
+                <div class="dropdown_list_element" data-value="random_uniform" onclick="dropdown_select(this)"><span>Random Uniform</span></div>
+                <div class="dropdown_list_element" data-value="zeros" onclick="dropdown_select(this)"><span>Zeros</span></div>
+                <div class="dropdown_list_element" data-value="ones" onclick="dropdown_select(this)"><span>Ones</span></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="middle_sepparator_line"><div></div></div>
+
 
     <div class="flex_box justify_middle">
         <span class="input_explanation">Neural network title:</span>
@@ -43,7 +68,7 @@
     <div class="middle_sepparator_line"><div></div></div>
 
     <div class="div_container_align_middle">
-        <div class="button">Initialize network</div>
+        <div class="button" onclick="initialize_network()">Initialize network</div>
     </div>
 
 </div>
