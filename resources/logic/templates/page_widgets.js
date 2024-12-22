@@ -282,12 +282,49 @@ function send_training_images(training_object) {
     .then(response => response.json())
     .then(data => {
         if(data.success) {
-            updates_console_update("Neural network trained successfully on <b>" + training_object.training_iterations + "</b> runs", false);
+            updates_console_update("Neural network trained successfully on <b>" + training_object.training_runs + "</b> runs", false);
+            updates_console_update("Average Loss: <b>" + data.average_loss + "</b>", false);
+            updates_console_update("Median Loss: <b>" + data.median_loss + "</b>", false);
+            update_weights_display(data.last_run_inputs, data.last_run_collapsed_outputs);
+            document.getElementById("weights_display_average_loss").innerText = data.average_loss;
+            document.getElementById("weights_display_median_loss").innerText = data.median_loss;
         } else {
             updates_console_update("Failed to train neural network: <b>" + data.message + "</b>", true);
         }
     })
     .catch(error => {
         updates_console_update("Error training neural network: <b>" + error + "</b>", true);
+    });
+}
+
+function update_weights_display(inputs, outputs) {
+    const inputContainer = document.getElementById("weights_display_input_squares_container");
+    const outputContainer = document.getElementById("weights_display_output_squares_container");
+
+    inputContainer.innerHTML = "";
+    outputContainer.innerHTML = "";
+
+    inputs.forEach((value, index) => {
+        const square = document.createElement("div");
+        square.classList.add("weights_display_paint_square");
+        if (value === 1) {
+            square.classList.add("weights_display_paint_square_active");
+        }
+        inputContainer.appendChild(square);
+        if ((index + 1) % neural_network.input_horizontal === 0) {
+            inputContainer.appendChild(document.createElement("br"));
+        }
+    });
+
+    outputs.forEach((value, index) => {
+        const square = document.createElement("div");
+        square.classList.add("weights_display_paint_square");
+        if (value === 1) {
+            square.classList.add("weights_display_paint_square_active");
+        }
+        outputContainer.appendChild(square);
+        if ((index + 1) % neural_network.output_horizontal === 0) {
+            outputContainer.appendChild(document.createElement("br"));
+        }
     });
 }

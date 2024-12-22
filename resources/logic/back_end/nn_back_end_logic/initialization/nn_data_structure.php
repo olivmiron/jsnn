@@ -9,6 +9,7 @@ class NeuralNetworkStructure {
     public $neurons_per_layer;
     public $weights;
     private $stored_file_name;
+    private $last_update_date;
 
     public function __construct($data) {
         $this->name = $data['name'];
@@ -138,8 +139,9 @@ class NeuralNetworkStructure {
 
         file_put_contents($file_path, $json_data);
 
-        // Update stored_file_name with the new file name
+        // Update stored_file_name and last_update_date with the new file name and date
         $this->stored_file_name = $safe_name . '.json';
+        $this->last_update_date = $date; // Update the last update date
 
         return true;
     }
