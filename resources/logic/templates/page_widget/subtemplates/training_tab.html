@@ -8,7 +8,7 @@
     <div class="flex_box justify_middle">
         <span class="input_explanation">Train on:</span>
         
-        <div id="training_tab_train_on"class="dropdown" data-opened="0" data-value="current_image" onclick="dropdown_toggle(this)">
+        <div id="training_mode_selector" class="dropdown" data-opened="0" data-value="current_image" onclick="dropdown_toggle(this)">
             <div class="dropdown_main">
                 <span class="dropdown_main_text">Current image</span>
                 <div class="dropdown_main_arrow">
@@ -51,6 +51,6 @@
     <div class="middle_sepparator_line"><div></div></div>
 
     <div class="div_container_align_middle">
-        <div class="button">Train network</div>
+        <div class="button" id="train_network_button" onclick="train_neural_network()">Train network</div>
     </div>
 </div>

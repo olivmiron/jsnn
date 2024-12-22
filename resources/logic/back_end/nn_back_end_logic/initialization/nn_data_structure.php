@@ -2,15 +2,18 @@
 class NeuralNetworkStructure {
     public $name;
     public $initialization_type;
+    public $training_iterations;
     public $input_dimensions;
     public $output_dimensions;
     public $deep_layers;
     public $neurons_per_layer;
     public $weights;
+    private $stored_file_name;
 
     public function __construct($data) {
         $this->name = $data['name'];
         $this->initialization_type = $data['initialization_type'];
+        $this->training_iterations = $data['training_iterations'];
         $this->input_dimensions = [
             'vertical' => $data['input_vertical'],
             'horizontal' => $data['input_horizontal']
@@ -61,7 +64,7 @@ class NeuralNetworkStructure {
         $std_dev = sqrt(2.0 / ($inputs + $outputs));
         for ($i = 0; $i < $inputs; $i++) {
             for ($j = 0; $j < $outputs; $j++) {
-                $weights[$i][$j] = (rand(-1000, 1000) / 1000) * $std_dev;
+                $weights[$i][$j] = (mt_rand(-1000, 1000) / 1000) * $std_dev;
             }
         }
         return $weights;
@@ -72,7 +75,7 @@ class NeuralNetworkStructure {
         $std_dev = sqrt(2.0 / $inputs);
         for ($i = 0; $i < $inputs; $i++) {
             for ($j = 0; $j < $outputs; $j++) {
-                $weights[$i][$j] = (rand(-1000, 1000) / 1000) * $std_dev;
+                $weights[$i][$j] = (mt_rand(-1000, 1000) / 1000) * $std_dev;
             }
         }
         return $weights;
@@ -82,7 +85,7 @@ class NeuralNetworkStructure {
         $weights = [];
         for ($i = 0; $i < $inputs; $i++) {
             for ($j = 0; $j < $outputs; $j++) {
-                $weights[$i][$j] = (rand(-1000, 1000) / 1000) * 0.1;
+                $weights[$i][$j] = (mt_rand(-1000, 1000) / 1000) * 0.1;
             }
         }
         return $weights;
@@ -92,7 +95,7 @@ class NeuralNetworkStructure {
         $weights = [];
         for ($i = 0; $i < $inputs; $i++) {
             for ($j = 0; $j < $outputs; $j++) {
-                $weights[$i][$j] = rand(-1000, 1000) / 1000;
+                $weights[$i][$j] = mt_rand(-1000, 1000) / 1000;
             }
         }
         return $weights;
@@ -116,6 +119,29 @@ class NeuralNetworkStructure {
             }
         }
         return $weights;
+    }
+
+    public function store() {
+        session_start();
+        $_SESSION['neural_network'] = $this;
+
+        $json_data = json_encode($this);
+        $date = date('Y-m-d_His');
+        $safe_name = empty($this->name) ? 'nn_' . $date : $this->name . '_' . $date;
+        $file_path = $_SERVER['DOCUMENT_ROOT'] . '/resources/specific/neural_network_weights/' . $safe_name . '.json';
+
+        // Delete the previous file if it exists
+        if (!empty($this->stored_file_name)) {
+            $previous_file_path = $_SERVER['DOCUMENT_ROOT'] . '/resources/specific/neural_network_weights/' . $this->stored_file_name;
+            if (file_exists($previous_file_path)) {unlink($previous_file_path);}
+        }
+
+        file_put_contents($file_path, $json_data);
+
+        // Update stored_file_name with the new file name
+        $this->stored_file_name = $safe_name . '.json';
+
+        return true;
     }
 
 }

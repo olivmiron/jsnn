@@ -1,101 +1,17 @@
 <div id="training_images_container">
-
-    <div class="training_image">
-        <div class="training_image_input">
-
-            <div class="training_image_paint_square training_image_paint_square_active"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <br/>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <br/>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-
-        </div>
-
-        <div class="training_image_separator"><div></div></div>
-
-        <div class="training_image_output">
-            
-        <div class="training_image_paint_square"></div>
-        <div class="training_image_paint_square"></div>
-        <div class="training_image_paint_square"></div>
-        <br/>
-        <div class="training_image_paint_square"></div>
-        <div class="training_image_paint_square"></div>
-        <div class="training_image_paint_square"></div>
-        <br/>
-        <div class="training_image_paint_square"></div>
-        <div class="training_image_paint_square"></div>
-        <div class="training_image_paint_square"></div>
-
-        </div>
-    </div>
-
-
 </div>
 
 <template id="training_image_template">
     <div class="training_image">
+        
+        <button class="training_image_delete_button" onclick="deleteTrainingImage(0, this)">&#10006;</button>
+        
         <div class="training_image_input">
-
-<!--             
-            <div class="training_image_paint_square training_image_paint_square_active"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <br/>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <br/>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-             -->
-
-
         </div>
 
         <div class="training_image_separator"><div></div></div>
 
         <div class="training_image_output">
-            
-        <!--             
-            <div class="training_image_paint_square training_image_paint_square_active"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <br/>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <br/>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-            <div class="training_image_paint_square"></div>
-             -->
-
         </div>
     </div>
 </template>

@@ -244,11 +244,12 @@ input[type=text]:focus, input[type=number]:focus {box-shadow: 0px 0px 8px -3px;}
 
 /* training images */
 
-.training_image {display: inline-block;margin: 7px;border-radius: var(--standard_border_radius);border: 1px solid var(--main_color);padding: 8px;background-color: white;box-shadow: 0px 2px 10px -5px black;}
+.training_image {display: inline-block;position: relative;margin: 7px;border-radius: var(--standard_border_radius);border: 1px solid var(--main_color);padding: 8px;background-color: white;box-shadow: 0px 2px 10px -5px black;}
+.training_image_delete_button {position: absolute;top: 0px;right: 0px;transform: translate(50%, -50%);background-color: var(--main_color);color: white;border: none;border-radius: 50%;width: 20px;height: 20px;font-size: 8px;line-height: 19px;cursor: pointer;text-align: center;}
 .training_image_input {text-align: center;}
 .training_image_output {text-align: center;}
 
-.training_image_paint_square {display: inline-block;height: 12px;width: 12px;margin: 1px;background-color: var(--main_color);opacity: 0.3;cursor: pointer;transition: var(--standard_transition);}
+.training_image_paint_square {display: inline-block;height: 12px;width: 12px;margin: 1px;background-color: var(--main_color);opacity: 0.3;/* cursor: pointer; */transition: var(--standard_transition);}
 .training_image_paint_square_active {opacity: 0.8;}
 
 
@@ -260,7 +261,7 @@ input[type=text]:focus, input[type=number]:focus {box-shadow: 0px 0px 8px -3px;}
 
 #weights_display_input_squares_container {text-align: center;user-select: none;}
 #weights_display_output_squares_container {text-align: center;user-select: none;}
-.weights_display_paint_square {display: inline-block;height: 32px;width: 32px;margin: 1px;background-color: var(--main_color);opacity: 0.5;cursor: pointer;transition: var(--standard_transition);}
+.weights_display_paint_square {display: inline-block;height: 32px;width: 32px;margin: 1px;background-color: var(--main_color);opacity: 0.5;/* cursor: pointer; */transition: var(--standard_transition);}
 .weights_display_paint_square_active {opacity: 1;}
 
 

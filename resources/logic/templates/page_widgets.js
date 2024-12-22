@@ -14,7 +14,9 @@
 //     output_vertical: 3,
 //
 //     deep_layers: 0, 
-//     neurons_per_deep_layer: 0
+//     neurons_per_deep_layer: 0, 
+// 
+//     training_iterations: 0
 // }
 
 
@@ -34,10 +36,15 @@ function initialize_network() {
 
     neural_network.initialized = true;
 
+    neural_network.training_iterations = 0;
+
     
     updates_console_update("Neural network initialized successfully", false);
 
     send_network_initialization();
+
+    update_image_painter();
+    empty_training_images();
 }
 
 function send_network_initialization() {
@@ -63,6 +70,37 @@ function send_network_initialization() {
         updates_console_update("Error initializing neural network: " + error, true);
     });
 }
+
+
+function update_image_painter() {
+    var image_painter_input_squares_container = document.getElementById("image_painter_input_squares_container");
+    var image_painter_output_squares_container = document.getElementById("image_painter_output_squares_container");
+
+    image_painter_input_squares_container.innerHTML = "";
+    image_painter_output_squares_container.innerHTML = "";
+
+    for(var i = 0; i < neural_network.input_horizontal * neural_network.input_vertical; i++) {
+    if (i != 0 && i % neural_network.input_horizontal === 0) {image_painter_input_squares_container.appendChild(document.createElement("br"));}
+        var image_painter_square_template = document.getElementById("image_painter_square_template").content.cloneNode(true);
+        image_painter_input_squares_container.appendChild(image_painter_square_template);
+    }
+
+    for(var i = 0; i < neural_network.output_horizontal * neural_network.output_vertical; i++) {
+        if (i != 0 && i % neural_network.output_horizontal === 0) {image_painter_output_squares_container.appendChild(document.createElement("br"));}
+
+        var image_painter_square_template = document.getElementById("image_painter_square_template").content.cloneNode(true);
+        image_painter_output_squares_container.appendChild(image_painter_square_template);
+    }
+}
+
+
+function empty_training_images() {
+    training_images = [];
+    document.getElementById("training_images_container").innerHTML = "";
+}
+
+
+
 
 
 
@@ -142,9 +180,24 @@ function image_painter_save_image() {
         if(index > 0 && (index + 1) % neural_network.output_horizontal == 0) {training_image_template_input.appendChild(document.createElement("br"));}
     });
 
+    // Set delete button's onclick to pass the index of the training image
+    training_image_template.querySelector(".training_image_delete_button").setAttribute("onclick", `deleteTrainingImage(${current_training_images_number}, this)`);
 
     training_images_container.appendChild(training_image_template);
 }
+
+
+
+
+function deleteTrainingImage(index, button) {
+    // Remove the training image from the array
+    training_images.splice(index, 1);
+
+    // Remove the HTML element
+    const trainingImage = button.closest('.training_image');
+    trainingImage.remove();
+}
+
 
 
 
@@ -172,4 +225,69 @@ function updates_console_update(message, error_or_not) {
 
     updates_console_logs_container.appendChild(updates_console_log_element);
 
+}
+
+
+
+// Training neural network front-end logic
+
+function train_neural_network() {
+    if(!neural_network.initialized) {
+        updates_console_update("Neural network not initialized", true);
+        return 0;
+    }
+
+    var training_type = document.getElementById("training_mode_selector").getAttribute("data-value");
+    var this_run_training_iterations = parseInt(document.getElementById("training_tab_train_iterations").getAttribute("data-value"));
+    var training_data = [];
+
+    if (training_type === "current_image") {
+        var current_image_input = [];
+        var current_image_output = [];
+
+        document.getElementById("image_painter_input_squares_container").querySelectorAll(".image_painter_paint_square").forEach(element => {
+            current_image_input.push((element.classList.contains("image_painter_paint_square_active") ? 1 : 0));
+        });
+
+        document.getElementById("image_painter_output_squares_container").querySelectorAll(".image_painter_paint_square").forEach(element => {
+            current_image_output.push((element.classList.contains("image_painter_paint_square_active") ? 1 : 0));
+        });
+
+        training_data.push([current_image_input, current_image_output]);
+    } else if (training_type === "stored_images") {
+        if (training_images.length == 0) {
+            updates_console_update("No stored training images", true);
+            return 0;
+        }
+        training_data = training_images;
+    }
+
+    var training_object = {
+        training_data: training_data,
+        training_runs: this_run_training_iterations
+    };
+
+    send_training_images(training_object);
+}
+
+function send_training_images(training_object) {
+    // Send AJAX request to nn_trainer.php
+    fetch('/resources/logic/back_end/nn_back_end_logic/training/nn_trainer.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(training_object)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            updates_console_update("Neural network trained successfully on <b>" + training_object.training_iterations + "</b> runs", false);
+        } else {
+            updates_console_update("Failed to train neural network: <b>" + data.message + "</b>", true);
+        }
+    })
+    .catch(error => {
+        updates_console_update("Error training neural network: <b>" + error + "</b>", true);
+    });
 }
