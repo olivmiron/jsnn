@@ -30,13 +30,13 @@ function nn_initializer_main() {
     $check = check_data($data);
     
     if ($check === true) {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {session_start();}
         $nn = create_nn_object($data);
         $nn->store();
         $response = [
             'success' => true,
             'message' => 'Neural network initialized and stored successfully', 
-            "nn_object" => json_encode($nn)
+            // "nn_object" => json_encode($nn)
         ];
     } else {
         $response = [

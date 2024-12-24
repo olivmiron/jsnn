@@ -43,8 +43,10 @@ function initialize_network() {
 
     send_network_initialization();
 
-    update_image_painter();
+    initialize_image_painter();
     empty_training_images();
+
+    initialize_weights_display();
 }
 
 function send_network_initialization() {
@@ -59,6 +61,7 @@ function send_network_initialization() {
     .then(response => response.json())
     .then(data => {
         if(data.success) {
+            neural_network.initialized = true;
             updates_console_update("Neural network initialized successfully", false);
         } else {
             neural_network.initialized = false;
@@ -72,7 +75,7 @@ function send_network_initialization() {
 }
 
 
-function update_image_painter() {
+function initialize_image_painter() {
     var image_painter_input_squares_container = document.getElementById("image_painter_input_squares_container");
     var image_painter_output_squares_container = document.getElementById("image_painter_output_squares_container");
 
@@ -100,7 +103,25 @@ function empty_training_images() {
 }
 
 
+function initialize_weights_display() {
+    var weights_display_input_squares_container = document.getElementById("weights_display_input_squares_container");
+    var weights_display_output_squares_container = document.getElementById("weights_display_output_squares_container");
 
+    weights_display_input_squares_container.innerHTML = "";
+    weights_display_output_squares_container.innerHTML = "";
+
+    for(var i = 0; i < neural_network.input_horizontal * neural_network.input_vertical; i++) {
+        if (i != 0 && i % neural_network.input_horizontal === 0) {weights_display_input_squares_container.appendChild(document.createElement("br"));}
+        var weights_display_square_template = document.getElementById("weights_display_square_template").content.cloneNode(true);
+        weights_display_input_squares_container.appendChild(weights_display_square_template);
+    }
+
+    for(var i = 0; i < neural_network.output_horizontal * neural_network.output_vertical; i++) {
+        if (i != 0 && i % neural_network.output_horizontal === 0) {weights_display_output_squares_container.appendChild(document.createElement("br"));}
+        var weights_display_square_template = document.getElementById("weights_display_square_template").content.cloneNode(true);
+        weights_display_output_squares_container.appendChild(weights_display_square_template);
+    }
+}
 
 
 
@@ -196,6 +217,12 @@ function deleteTrainingImage(index, button) {
     // Remove the HTML element
     const trainingImage = button.closest('.training_image');
     trainingImage.remove();
+
+    // Update onclick attributes for all remaining delete buttons
+    const remainingButtons = document.querySelectorAll('.training_image_delete_button');
+    remainingButtons.forEach((btn, newIndex) => {
+        btn.setAttribute('onclick', `deleteTrainingImage(${newIndex}, this)`);
+    });
 }
 
 
@@ -219,7 +246,7 @@ function updates_console_update(message, error_or_not) {
     updates_console_log_element.querySelector(".nn_console_item_div_timedate").innerText = `${day}/${month}/${year} ${hours}:${minutes}`;
 
 
-    updates_console_log_element.querySelector(".nn_console_item_div_content").innerText = message;
+    updates_console_log_element.querySelector(".nn_console_item_div_content").innerHTML = message;
 
     if(error_or_not) {updates_console_log_element.querySelector(".nn_console_item_div").classList.add("nn_console_item_div_error");}
 
@@ -272,7 +299,7 @@ function train_neural_network() {
 
 function send_training_images(training_object) {
     // Send AJAX request to nn_trainer.php
-    fetch('/resources/logic/back_end/nn_back_end_logic/training/nn_trainer.php', {
+    fetch('/resources/logic/back_end/nn_back_end_logic/training/nn_trainer_2.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -288,6 +315,7 @@ function send_training_images(training_object) {
             update_weights_display(data.last_run_inputs, data.last_run_collapsed_outputs);
             document.getElementById("weights_display_average_loss").innerText = data.average_loss;
             document.getElementById("weights_display_median_loss").innerText = data.median_loss;
+            neural_network.training_iterations += training_object.training_runs;
         } else {
             updates_console_update("Failed to train neural network: <b>" + data.message + "</b>", true);
         }

@@ -123,7 +123,7 @@ class NeuralNetworkStructure {
     }
 
     public function store() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {session_start();}
         $_SESSION['neural_network'] = $this;
 
         $json_data = json_encode($this);

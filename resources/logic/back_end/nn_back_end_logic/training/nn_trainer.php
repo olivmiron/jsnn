@@ -21,13 +21,15 @@ function send_response($response) {
     echo json_encode($response);
 }
 
-function forward_propagation($nn, $data) {
+function forward_propagation($nn, $data, &$layer_inputs) {
     $inputs = $data['inputs'];
     $outputs = [];
 
     // Process through each layer
     $layer_input = $inputs;
+    $layer_inputs = []; // Initialize layer_inputs array
     foreach ($nn->weights as $layer_weights) {
+        $layer_inputs[] = $layer_input; // Store the input for the current layer
         $layer_output = [];
         foreach ($layer_weights as $neuron_weights) {
             $neuron_output = 0;
@@ -53,9 +55,8 @@ function calculate_loss($nn, $data, $predicted_output) {
     return $loss / count($actual_output);
 }
 
-function backpropagation($nn, $data, $predicted_output) {
+function backpropagation($nn, $data, $predicted_output, $learning_rate, $layer_inputs) {
     $actual_output = $data['outputs'];
-    $learning_rate = 0.01; // You can adjust the learning rate
 
     // Calculate output layer error
     $output_errors = [];
@@ -71,29 +72,17 @@ function backpropagation($nn, $data, $predicted_output) {
         for ($neuron = 0; $neuron < count($layer_weights); $neuron++) {
             $neuron_error = 0;
             foreach ($nn->weights[$layer][$neuron] as $weight_index => $weight) {
-                $neuron_error += $errors[$neuron] * $weight;
-                // Update weight
-                $nn->weights[$layer][$neuron][$weight_index] -= $learning_rate * $errors[$neuron] * $nn->inputs[$layer][$weight_index];
+                if (isset($errors[$neuron])) {
+                    $neuron_error += $errors[$neuron] * $weight;
+                    // Update weight
+                    if (isset($layer_inputs[$layer][$weight_index])) {
+                        $nn->weights[$layer][$neuron][$weight_index] -= $learning_rate * $errors[$neuron] * $layer_inputs[$layer][$weight_index];
+                    }
+                }
             }
             $layer_errors[$neuron] = $neuron_error;
         }
         $errors = $layer_errors;
-    }
-}
-
-function update_weights($nn) {
-    $learning_rate = 0.01; // You can adjust the learning rate
-
-    // Iterate through each layer
-    for ($layer = 0; $layer < count($nn->weights); $layer++) {
-        // Iterate through each neuron in the layer
-        for ($neuron = 0; $neuron < count($nn->weights[$layer]); $neuron++) {
-            // Iterate through each weight of the neuron
-            for ($weight_index = 0; $weight_index < count($nn->weights[$layer][$neuron]); $weight_index++) {
-                // Update the weight using the gradient stored in the neuron
-                $nn->weights[$layer][$neuron][$weight_index] -= $learning_rate * $nn->gradients[$layer][$neuron][$weight_index];
-            }
-        }
     }
 }
 
@@ -127,16 +116,16 @@ function perform_training($nn, $training_data, $training_runs, &$average_loss, &
     for ($run = 0; $run < $training_runs; $run++) {
         // Pick a random sample from the training data
         $random_index = array_rand($training_data);
-        $data = $training_data[$random_index];
+        $data = ["inputs" => $training_data[$random_index][0], "outputs" => $training_data[$random_index][1]];
 
         // Adapt learning rate
         $learning_rate = adapt_learning_rate($initial_learning_rate, $run, $training_runs);
 
-        $predicted_output = forward_propagation($nn, $data);
+        $layer_inputs = []; // Initialize layer_inputs array for this run
+        $predicted_output = forward_propagation($nn, $data, $layer_inputs);
         $loss = calculate_loss($nn, $data, $predicted_output);
         $losses[] = $loss;
-        backpropagation($nn, $data, $predicted_output);
-        update_weights($nn);
+        backpropagation($nn, $data, $predicted_output, $learning_rate, $layer_inputs);
 
         // Store outputs for the last run
         if ($run == $training_runs - 1) {
@@ -148,8 +137,6 @@ function perform_training($nn, $training_data, $training_runs, &$average_loss, &
     $nn->store();
 
     // Calculate average and median loss for the last run
-    $average_loss = array_sum($losses) / count($losses);
-    $median_loss = calculate_median($losses);
     $last_run_losses = array_slice($losses, -1);
     $average_loss = array_sum($last_run_losses) / count($last_run_losses);
     $median_loss = calculate_median($last_run_losses);
