@@ -1,0 +1,39 @@
+<!-- The button -->
+
+<div class="button">Click</div>
+
+
+<!-- The check box -->
+
+<div class="checkbox checkbox_checked" onclick="toggle_checkbox(this)">
+    <div class="checkbox_box"><img src="/resources/design/media/icons/check_mark.png"/></div>
+    <div class="checkbox_text">
+        <span>Check mark</span>
+    </div>
+</div>
+
+<!-- The input element -->
+
+
+
+<input type="text" placeholder="name" onclick="this.select();">
+
+<input type="number" value="12" onclick="this.select();">
+
+
+<!-- The drop down -->
+
+<div class="dropdown" data-opened="0" data-value="1" onclick="dropdown_toggle(this)">
+    <div class="dropdown_main">
+        <span class="dropdown_main_text">Selection #1</span>
+        <div class="dropdown_main_arrow">
+            <img src="/resources/design/media/icons/arrow_down_black.png"/>
+        </div>
+    </div>
+    <div class="dropdown_list">
+        <div class="dropdown_list_element dropdown_list_active_element" data-value="1" onclick="dropdown_select(this)"><span>Selection #1</span></div>
+        <div class="dropdown_list_element" data-value="2" onclick="dropdown_select(this)"><span>Selection #2</span></div>
+        <div class="dropdown_list_element" data-value="3" onclick="dropdown_select(this)"><span>Selection #3</span></div>
+        <div class="dropdown_list_element" data-value="4" onclick="dropdown_select(this)"><span>Selection #4</span></div>
+    </div>
+</div>

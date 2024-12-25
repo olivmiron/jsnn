@@ -98,8 +98,8 @@ input[type=text]:focus, input[type=number]:focus {box-shadow: 0px 0px 8px -3px;}
 .checkbox_box {
   border: 1px solid var(--main_color);
   border-radius: var(--standard_border_radius);
-  height: 1.2em;
-  padding: var(--standard_padding);
+  height: 1em;
+  padding: 4px;
   }
 .checkbox_box img {height: 100%;opacity: 0;transition: var(--standard_transition);}
 .checkbox_text {}
@@ -268,4 +268,4 @@ input[type=text]:focus, input[type=number]:focus {box-shadow: 0px 0px 8px -3px;}
 
 /* other elements */
 
-#index_widgets_per_row_div {margin: 15px 30px 5px;}
+#index_top_settings {margin: 15px 30px 5px;display: flex;align-items: center;}

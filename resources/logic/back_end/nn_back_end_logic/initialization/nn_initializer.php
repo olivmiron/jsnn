@@ -30,7 +30,6 @@ function nn_initializer_main() {
     $check = check_data($data);
     
     if ($check === true) {
-        if (session_status() === PHP_SESSION_NONE) {session_start();}
         $nn = create_nn_object($data);
         $nn->store();
         $response = [

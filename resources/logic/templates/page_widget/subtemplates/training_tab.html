@@ -1,4 +1,4 @@
-<div>
+<div id="widget_training_tab">
 
     <div class="div_container_align_middle">
         <h2>Train neural network</h2>
@@ -46,6 +46,35 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="middle_sepparator_line"><div></div></div>
+
+    
+    <div class="flex_box justify_middle">
+        <span class="input_explanation">Activation function:</span>
+        
+        <div id="training_tab_activation_function"class="dropdown" data-opened="0" data-value="sigmoid" onclick="dropdown_toggle(this)">
+            <div class="dropdown_main">
+                <span class="dropdown_main_text">sigmoid</span>
+                <div class="dropdown_main_arrow">
+                    <img src="/resources/design/media/icons/arrow_down_black.png"/>
+                </div>
+            </div>
+            <div class="dropdown_list">
+                <div class="dropdown_list_element dropdown_list_active_element" data-value="sigmoid" onclick="dropdown_select(this)"><span>sigmoid</span></div>
+                <div class="dropdown_list_element" data-value="relu" onclick="dropdown_select(this)"><span>relu</span></div>
+                <div class="dropdown_list_element" data-value="tanh" onclick="dropdown_select(this)"><span>tanh</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="middle_sepparator_line"><div></div></div>
+
+
+    <div class="flex_box justify_middle">
+        <span class="input_explanation">Learning hill descent:</span>
+        <input id="training_tab_learning_descent" type="number" value="0.5" min="0" max="5" step="0.1" onclick="this.select();">
     </div>
 
     <div class="middle_sepparator_line"><div></div></div>

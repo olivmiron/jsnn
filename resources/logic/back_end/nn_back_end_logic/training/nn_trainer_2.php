@@ -41,7 +41,7 @@ function training_params_init() {
 
     if ($training_params === null) {$training_params_init_state[0] = false;$training_params_init_state[1] = 'Invalid JSON data received';}
     
-    $required = ['training_data', 'training_runs'];
+    $required = ['training_data', 'training_runs', 'activation_function', 'learning_descent'];
     foreach ($required as $field) {
         if (!isset($training_params[$field])) {
             $training_params_init_state[0] = false;$training_params_init_state[1] = "Missing field: {$field}";
@@ -53,7 +53,8 @@ function training_params_init() {
     
     $training_params["current_training_run"] = 0;
     $training_params["learning_rate"] = 0.01;
-    $training_params["derivative"] = "sigmoid"; // Default activation function is sigmoid; CAN BE CHANGED
+    $training_params["derivative"] = $training_params["activation_function"];
+    $training_params["learning_descent"] = 0.5; // How much the learning rate decreases after each run - $learning_rate = $learning_rate / ($current_training_run * $learning_descent + 1);
 }
 
 function training_state_init() {
@@ -147,6 +148,7 @@ function train() {
             $response_object['last_run_inputs'] = $training_data_io['inputs'];
             $response_object['last_run_outputs'] = $training_state['training_data']['neurons'][count($training_state['training_data']['neurons']) - 1];
             $response_object['last_run_collapsed_outputs'] = collapse_output($training_state['training_data']['neurons'][count($training_state['training_data']['neurons']) - 1]);
+            $response_object['weights'] = $training_state['training_data']['weights'];
             $response_object['average_loss'] = calculate_average_loss();
             $response_object['median_loss'] = calculate_median_loss();
         }
@@ -163,7 +165,7 @@ function collapse_output($output) {
 
 function adapt_learning_rate() {
     global $training_params;
-    $training_params['learning_rate'] = $training_params['learning_rate'] / ($training_params['current_training_run'] + 1);
+    $training_params['learning_rate'] = $training_params['learning_rate'] / ($training_params['current_training_run'] * $training_params["learning_descent"] + 1);
 }
 
 function train_forward($training_data_io) {
@@ -207,7 +209,6 @@ function activation_function($input) {
     }
 }
 
-
 function calculate_output_losses($training_data_io) {
     global $training_state;
 
@@ -216,7 +217,7 @@ function calculate_output_losses($training_data_io) {
     $losses = [];
 
     for ($i = 0; $i < count($actual_output); $i++) {
-        $losses[] = pow($predicted_output[$i] - $actual_output[$i], 2);
+        $losses[] = pow($actual_output[$i] - $predicted_output[$i], 2);
     }
 
     // Store the losses for the last layer of neurons
@@ -239,11 +240,26 @@ function train_backward($training_data_io) {
             for ($j = 0; $j < count($next_layer_errors); $j++) {
                 $error += $next_layer_errors[$j] * $next_layer_weights[$i][$j];
             }
-            $current_layer_errors[] = $error * $current_layer_neurons[$i] * (1 - $current_layer_neurons[$i]); // Derivative of sigmoid
+            $current_layer_errors[] = $error * activation_function_derivative($current_layer_neurons[$i]);
         }
         $training_state['training_data']['losses'][$layer] = $current_layer_errors;
     }
 }
+
+function activation_function_derivative($input) {
+    global $training_params;
+    switch ($training_params["derivative"]) {
+        case 'relu':
+            return $input > 0 ? 1 : 0;
+        case 'tanh':
+            return 1 - pow(tanh($input), 2);
+        case 'sigmoid':
+        default:
+            $sigmoid = 1 / (1 + exp(-$input));
+            return $sigmoid * (1 - $sigmoid);
+    }
+}
+
 
 function train_weights_update() {
     global $training_state, $training_params;

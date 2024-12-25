@@ -99,7 +99,7 @@ function initialize_image_painter() {
 
 function empty_training_images() {
     training_images = [];
-    document.getElementById("training_images_container").innerHTML = "";
+    document.getElementById("widget_training_images").innerHTML = "";
 }
 
 
@@ -178,7 +178,7 @@ function image_painter_save_image() {
 
     var training_image_template = document.getElementById("training_image_template").content.cloneNode(true);
     var training_image_square_template = document.getElementById("training_image_square_template");
-    var training_images_container = document.getElementById("training_images_container");
+    var training_images_container = document.getElementById("widget_training_images");
 
     var training_image_template_input = training_image_template.querySelector(".training_image_input");
 
@@ -266,6 +266,8 @@ function train_neural_network() {
 
     var training_type = document.getElementById("training_mode_selector").getAttribute("data-value");
     var this_run_training_iterations = parseInt(document.getElementById("training_tab_train_iterations").getAttribute("data-value"));
+    var this_run_activation_function = document.getElementById("training_tab_activation_function").getAttribute("data-value");
+    var this_run_learning_descent = document.getElementById("training_tab_learning_descent").value;
     var training_data = [];
 
     if (training_type === "current_image") {
@@ -291,7 +293,9 @@ function train_neural_network() {
 
     var training_object = {
         training_data: training_data,
-        training_runs: this_run_training_iterations
+        training_runs: this_run_training_iterations,
+        activation_function : this_run_activation_function, 
+        learning_descent: this_run_learning_descent
     };
 
     send_training_images(training_object);
