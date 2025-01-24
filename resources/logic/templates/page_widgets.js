@@ -46,7 +46,9 @@ function initialize_network() {
     initialize_image_painter();
     empty_training_images();
 
-    initialize_weights_display();
+    initialize_io_display();
+
+    initialize_weights_viewer();
 }
 
 function send_network_initialization() {
@@ -103,23 +105,23 @@ function empty_training_images() {
 }
 
 
-function initialize_weights_display() {
-    var weights_display_input_squares_container = document.getElementById("weights_display_input_squares_container");
-    var weights_display_output_squares_container = document.getElementById("weights_display_output_squares_container");
+function initialize_io_display() {
+    var io_display_input_squares_container = document.getElementById("io_display_input_squares_container");
+    var io_display_output_squares_container = document.getElementById("io_display_output_squares_container");
 
-    weights_display_input_squares_container.innerHTML = "";
-    weights_display_output_squares_container.innerHTML = "";
+    io_display_input_squares_container.innerHTML = "";
+    io_display_output_squares_container.innerHTML = "";
 
     for(var i = 0; i < neural_network.input_horizontal * neural_network.input_vertical; i++) {
-        if (i != 0 && i % neural_network.input_horizontal === 0) {weights_display_input_squares_container.appendChild(document.createElement("br"));}
-        var weights_display_square_template = document.getElementById("weights_display_square_template").content.cloneNode(true);
-        weights_display_input_squares_container.appendChild(weights_display_square_template);
+        if (i != 0 && i % neural_network.input_horizontal === 0) {io_display_input_squares_container.appendChild(document.createElement("br"));}
+        var io_display_square_template = document.getElementById("io_display_square_template").content.cloneNode(true);
+        io_display_input_squares_container.appendChild(io_display_square_template);
     }
 
     for(var i = 0; i < neural_network.output_horizontal * neural_network.output_vertical; i++) {
-        if (i != 0 && i % neural_network.output_horizontal === 0) {weights_display_output_squares_container.appendChild(document.createElement("br"));}
-        var weights_display_square_template = document.getElementById("weights_display_square_template").content.cloneNode(true);
-        weights_display_output_squares_container.appendChild(weights_display_square_template);
+        if (i != 0 && i % neural_network.output_horizontal === 0) {io_display_output_squares_container.appendChild(document.createElement("br"));}
+        var io_display_square_template = document.getElementById("io_display_square_template").content.cloneNode(true);
+        io_display_output_squares_container.appendChild(io_display_square_template);
     }
 }
 
@@ -316,9 +318,9 @@ function send_training_images(training_object) {
             updates_console_update("Neural network trained successfully on <b>" + training_object.training_runs + "</b> runs", false);
             updates_console_update("Average Loss: <b>" + data.average_loss + "</b>", false);
             updates_console_update("Median Loss: <b>" + data.median_loss + "</b>", false);
-            update_weights_display(data.last_run_inputs, data.last_run_collapsed_outputs);
-            document.getElementById("weights_display_average_loss").innerText = data.average_loss;
-            document.getElementById("weights_display_median_loss").innerText = data.median_loss;
+            update_io_display(data.last_run_inputs, data.last_run_collapsed_outputs);
+            document.getElementById("io_display_average_loss").innerText = data.average_loss;
+            document.getElementById("io_display_median_loss").innerText = data.median_loss;
             neural_network.training_iterations += training_object.training_runs;
         } else {
             updates_console_update("Failed to train neural network: <b>" + data.message + "</b>", true);
@@ -329,18 +331,18 @@ function send_training_images(training_object) {
     });
 }
 
-function update_weights_display(inputs, outputs) {
-    const inputContainer = document.getElementById("weights_display_input_squares_container");
-    const outputContainer = document.getElementById("weights_display_output_squares_container");
+function update_io_display(inputs, outputs) {
+    const inputContainer = document.getElementById("io_display_input_squares_container");
+    const outputContainer = document.getElementById("io_display_output_squares_container");
 
     inputContainer.innerHTML = "";
     outputContainer.innerHTML = "";
 
     inputs.forEach((value, index) => {
         const square = document.createElement("div");
-        square.classList.add("weights_display_paint_square");
+        square.classList.add("io_display_paint_square");
         if (value === 1) {
-            square.classList.add("weights_display_paint_square_active");
+            square.classList.add("io_display_paint_square_active");
         }
         inputContainer.appendChild(square);
         if ((index + 1) % neural_network.input_horizontal === 0) {
@@ -350,13 +352,99 @@ function update_weights_display(inputs, outputs) {
 
     outputs.forEach((value, index) => {
         const square = document.createElement("div");
-        square.classList.add("weights_display_paint_square");
+        square.classList.add("io_display_paint_square");
         if (value === 1) {
-            square.classList.add("weights_display_paint_square_active");
+            square.classList.add("io_display_paint_square_active");
         }
         outputContainer.appendChild(square);
         if ((index + 1) % neural_network.output_horizontal === 0) {
             outputContainer.appendChild(document.createElement("br"));
         }
     });
+}
+
+
+
+// weights viewer
+
+var weights_viewer_screen_padding = 50;
+var neuron_height_width = 32;
+var neuron_spacing = 10;
+var weights_layer_width = 100;
+
+function initialize_weights_viewer() {
+    var weights_viewer_screen = document.getElementById("weights_viewer_screen");
+
+    var weights_viewer_neuron = document.getElementById("weights_viewer_neuron_template").content.cloneNode(true);
+    var weights_viewer_weight = document.getElementById("weights_viewer_weight_template").content.cloneNode(true);
+
+    weights_viewer_screen.style.height = (
+        weights_viewer_screen_padding * 2 /* vertical padding */ + 
+        (neuron_height_width + neuron_spacing) * Math.max((neural_network.input_horizontal * neural_network.input_vertical), (neural_network.output_horizontal * neural_network.output_vertical), neural_network.neurons_per_deep_layer)
+        - neuron_spacing
+        ) + "px";
+
+    weights_viewer_screen.style.width = weights_viewer_screen_padding * 2 /* horizontal padding */ + weights_layer_width * (neural_network.deep_layers + 1) + neuron_height_width * (neural_network.deep_layers + 2) + "px";
+
+
+    // initialize neurons display
+
+    for(var i = 0;i < (neural_network.deep_layers + 2);i++) {
+        if(i == 0) {
+            for(var j = 0;j < neural_network.input_horizontal * neural_network.input_vertical;j++) {
+                var neuron = weights_viewer_neuron.cloneNode(true);
+                neuron.querySelector(".weights_viewer_neuron").style = "top: " + (weights_viewer_screen_padding + (j * (neuron_height_width + neuron_spacing))) + "px; left: " + weights_viewer_screen_padding + "px;";
+                neuron.querySelector(".weights_viewer_neuron").id = "weights_viewer_neuron_" + i + "_" + j;
+                weights_viewer_screen.appendChild(neuron);
+
+            }
+        }
+
+        else if(i < (neural_network.deep_layers + 1)) {
+
+            for(var j = 0;j < neural_network.neurons_per_deep_layer;j++) {
+                var neuron = weights_viewer_neuron.cloneNode(true);
+                neuron.querySelector(".weights_viewer_neuron").style = "top: " + (weights_viewer_screen_padding + (j * (neuron_height_width + neuron_spacing))) + "px; left: " + (weights_viewer_screen_padding + i * (neuron_height_width + weights_layer_width)) + "px;";
+                neuron.querySelector(".weights_viewer_neuron").id = "weights_viewer_neuron_" + i + "_" + j;
+                weights_viewer_screen.appendChild(neuron);
+
+            }
+        }
+
+        else {
+
+
+            for(var j = 0;j < neural_network.output_horizontal * neural_network.output_vertical;j++) {
+                var neuron = weights_viewer_neuron.cloneNode(true);
+                neuron.querySelector(".weights_viewer_neuron").style = "top: " + (weights_viewer_screen_padding + (j * (neuron_height_width + neuron_spacing))) + "px; left: " + (weights_viewer_screen_padding + i * (neuron_height_width + weights_layer_width)) + "px;";
+                neuron.querySelector(".weights_viewer_neuron").id = "weights_viewer_neuron_" + i + "_" + j;
+                weights_viewer_screen.appendChild(neuron);
+
+            }
+        }
+    }
+
+
+
+    // initialize weights display
+
+
+    // var neural_network = {
+//     name: "", 
+//
+//     initialization_type: "",
+//
+//     initialized: false, 
+//
+//     input_horizontal: 5,
+//     input_vertical: 3,
+//
+//     output_horizontal: 3, 
+//     output_vertical: 3,
+//
+//     deep_layers: 0, 
+//     neurons_per_deep_layer: 0, 
+// 
+//     training_iterations: 0
+// }
 }

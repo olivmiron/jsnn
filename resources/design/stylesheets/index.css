@@ -30,6 +30,10 @@
 body {margin: 0px;font-family: "main_font";background-color: #f5f5f5;}
 
 
+
+.flex_br {display: flex;flex: 1 0 100%;}
+
+
 /* custom UI elements */
 
 input[type=text], input[type=number] {padding: var(--standard_padding);border-radius: var(--standard_border_radius);border: 1px solid var(--main_color);font-family: 'main_font';font-weight: bold;box-shadow: 0px 0px 5px -3px;background-color: white;transition: var(--standard_transition);margin: calc(var(--widget_spacing) * 3/4);}
@@ -257,15 +261,26 @@ input[type=text]:focus, input[type=number]:focus {box-shadow: 0px 0px 8px -3px;}
 .training_image_separator div {background-color: var(--main_color);opacity: 0.25;width: 30%;border-radius: 1000px;height: 100%;display: inline-block;position: absolute;top: 0;left: 50%;transform: translatex(-50%);}
 
 
-/* weights diplay */
+/* IO display */
 
-#weights_display_input_squares_container {text-align: center;user-select: none;}
-#weights_display_output_squares_container {text-align: center;user-select: none;}
-.weights_display_paint_square {display: inline-block;height: 32px;width: 32px;margin: 1px;background-color: var(--main_color);opacity: 0.5;/* cursor: pointer; */transition: var(--standard_transition);}
-.weights_display_paint_square_active {opacity: 1;}
+#io_display_input_squares_container {text-align: center;user-select: none;}
+#io_display_output_squares_container {text-align: center;user-select: none;}
+.io_display_paint_square {display: inline-block;height: 32px;width: 32px;margin: 1px;background-color: var(--main_color);opacity: 0.5;/* cursor: pointer; */transition: var(--standard_transition);}
+.io_display_paint_square_active {opacity: 1;}
 
 
+
+
+/* weights viewer */
+
+#widget_weights_viewer {width: 100%;overflow-x: auto;}
+#weights_viewer_screen {position: relative;}
+
+.weights_viewer_neuron {position: absolute;box-sizing: border-box;border: 1px solid var(--main_color);height: 32px;width: 32px;}
+.weights_viewer_neuron span {position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);}
+.weights_viewer_weight {position: relative;}
+.weights_viewer_weight span {position: absolute;top: 0;left: 50%;transform: translate(-50%, -50%);}
 
 /* other elements */
 
-#index_top_settings {margin: 15px 30px 5px;display: flex;align-items: center;}
+#index_top_settings {margin: 15px 30px 5px;display: flex;align-items: center;flex-wrap: wrap;}

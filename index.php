@@ -18,6 +18,8 @@
             <span>Widgets per row: </span>
             <input type="number" value="2" onclick="this.select();" oninput="index_change_widgets_per_row(this.value);">
 
+            <div class="flex_br"></div>
+
             <span>Show/hide widgets: </span>
 
             <div class="checkbox checkbox_checked" onclick="toggle_checkbox(this);toggle_widgets('initialize_neural_network')">
@@ -27,10 +29,10 @@
                 </div>
             </div>
 
-            <div class="checkbox checkbox_checked" onclick="toggle_checkbox(this);toggle_widgets('weights_display')">
+            <div class="checkbox checkbox_checked" onclick="toggle_checkbox(this);toggle_widgets('io_display')">
                 <div class="checkbox_box"><img src="/resources/design/media/icons/check_mark.png"/></div>
                 <div class="checkbox_text">
-                    <span>Weights display</span>
+                    <span>IO display</span>
                 </div>
             </div>
 
@@ -52,6 +54,13 @@
                 <div class="checkbox_box"><img src="/resources/design/media/icons/check_mark.png"/></div>
                 <div class="checkbox_text">
                     <span>Training tab</span>
+                </div>
+            </div>
+
+            <div class="checkbox checkbox_checked" onclick="toggle_checkbox(this);toggle_widgets('weights_viewer')">
+                <div class="checkbox_box"><img src="/resources/design/media/icons/check_mark.png"/></div>
+                <div class="checkbox_text">
+                    <span>Weights viewer</span>
                 </div>
             </div>
 

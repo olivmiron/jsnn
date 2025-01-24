@@ -5,7 +5,7 @@
 
 # Widgets:
 # * initialize neural network
-# * neural network weights display (if < 200 weights total)
+# * neural network IO display (if < 200 weights total)
 # * paint image
 # * save/delete images (nn only trains from saved images)
 # * neural network console

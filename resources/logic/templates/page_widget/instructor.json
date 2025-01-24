@@ -1,6 +1,6 @@
 {
     "widget_type" : "complex_no_css_js", 
-    "iterations": 6,
+    "iterations": 7,
     "replacement_keys": ["##title##", "##page_widget_content##"],
     "replacement_names" : ["title", "subtemplate_path"],
     "replacement_types" : ["string", "html"],
@@ -11,8 +11,8 @@
             "subtemplate_path" : "nn_initialization.html"
         },
         {
-            "title" : "Weights display",
-            "subtemplate_path" : "weights_display.html"
+            "title" : "IO display",
+            "subtemplate_path" : "io_display.html"
         },
         {
             "title" : "Image painter",
@@ -25,6 +25,10 @@
         {
             "title" : "Training tab",
             "subtemplate_path" : "training_tab.html"
+        },
+        {
+            "title" : "Weights viewer",
+            "subtemplate_path" : "weights_viewer.html"
         },
         {
             "title" : "Updates console",
